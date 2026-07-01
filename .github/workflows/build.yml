@@ -8,15 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Install cross-compiler
+      - name: Install aarch64 cross compiler
         run: |
           sudo apt update
           sudo apt install -y gcc-aarch64-linux-gnu make flex bison libssl-dev
 
-      - name: Download kernel headers (5.10.252)
+      - name: Download kernel source 5.10.252
         run: |
           wget -q https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.252.tar.xz
           tar -xf linux-5.10.252.tar.xz
@@ -24,11 +24,11 @@ jobs:
           make ARCH=arm64 defconfig
           make ARCH=arm64 modules_prepare
 
-      - name: Compile .ko
+      - name: Compile LKM .ko module
         run: |
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KERNELDIR=$PWD/linux-5.10.252 M=$PWD modules
 
-      - name: Upload .ko artifact
+      - name: Upload compiled ko artifact
         uses: actions/upload-artifact@v4
         with:
           name: cpu_spoof_ko
