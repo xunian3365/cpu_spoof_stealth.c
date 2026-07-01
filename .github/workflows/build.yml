@@ -1,5 +1,4 @@
 name: Build Kernel Module
-
 on:
   push:
     branches: [ "main" ]
@@ -10,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install aarch64 cross compiler
         run: |
@@ -30,7 +29,7 @@ jobs:
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KERNELDIR=$PWD/linux-5.10.252 M=$PWD modules
 
       - name: Upload compiled ko artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
-          name: cpu_spoof_ko
-          path: ./*.ko
+         name: cpu_spoof_ko
+         path: *.ko
