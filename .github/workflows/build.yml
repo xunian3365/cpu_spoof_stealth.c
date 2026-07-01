@@ -8,14 +8,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 步骤1 拉取代码
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      # 步骤2 安装交叉编译器
       - name: Install aarch64 cross compiler
         run: |
           sudo apt update
           sudo apt install -y gcc-aarch64-linux-gnu make flex bison libssl-dev
 
+      # 步骤3 下载内核源码
       - name: Download kernel source 5.10.252
         run: |
           wget -q https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.252.tar.xz
@@ -24,10 +27,12 @@ jobs:
           make ARCH=arm64 defconfig
           make ARCH=arm64 modules_prepare
 
+      # 步骤4 编译ko模块
       - name: Compile LKM .ko module
         run: |
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KERNELDIR=$PWD/linux-5.10.252 M=$PWD modules
 
+      # 步骤5 上传产物（缩进最容易出错的地方）
       - name: Upload compiled ko artifact
         uses: actions/upload-artifact@v4
         with:
