@@ -36,5 +36,5 @@ jobs:
       - name: Upload compiled ko artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cpu_spoof_ko
-          path: *.ko
+         name: cpu_spoof_ko
+         path: *.ko
