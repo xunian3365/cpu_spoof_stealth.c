@@ -1,4 +1,5 @@
 name: Build Kernel Module
+
 on:
   push:
     branches: [ "main" ]
@@ -32,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: cpu_spoof_ko
-          path: *.ko
+          path: ./*.ko
