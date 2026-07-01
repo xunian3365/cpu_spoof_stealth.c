@@ -1,5 +1,4 @@
 name: Build Kernel Module
-
 on:
   push:
     branches: [ "main" ]
