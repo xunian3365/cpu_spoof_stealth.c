@@ -19,7 +19,7 @@ jobs:
 
       - name: Download kernel source 5.10.252
         run: |
-          wget -q https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.252.tar.xz
+          wget https://mirrors.aliyun.com/linux-kernel/v5.x/linux-5.10.236.tar.xz
           tar -xf linux-5.10.252.tar.xz
           cd linux-5.10.252
           make ARCH=arm64 defconfig
