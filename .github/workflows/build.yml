@@ -19,21 +19,26 @@ jobs:
 
       - name: Download kernel source 5.10.252
         run: |
-          # 更换为官方全球边缘加速镜像，GitHub 服务器下载此源速度极快
+          # 1. 下载内核源码（使用官方全球边缘加速镜像，速度极快）
           wget -q --timeout=60 --tries=5 https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.10.252.tar.xz
           
-          # 修复了解压与目录版本号不一致的 Bug
+          # 2. 解压并进入目录
           tar -xf linux-5.10.252.tar.xz
           cd linux-5.10.252
-          make ARCH=arm64 defconfig
-          make ARCH=arm64 modules_prepare
+          
+          # 3. 核心修复：配置和准备内核时，必须加上 CROSS_COMPILE 参数指定 aarch64 编译器
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- defconfig
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- modules_prepare
 
       - name: Compile LKM .ko module
         run: |
+          # 编译你自己的驱动模块
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KERNELDIR=$PWD/linux-5.10.252 M=$PWD modules
 
       - name: Upload compiled ko artifact
         uses: actions/upload-artifact@v5
         with:
+          name: cpu_spoof_ko
+          path: ./*.ko        with:
           name: cpu_spoof_ko
           path: ./*.ko
